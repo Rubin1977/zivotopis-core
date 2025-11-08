@@ -1,0 +1,50 @@
+﻿@using ZivotopisCore.Models.Home
+@model OsobneUdajeModel
+    
+<div class="telo">
+    <h1 class="section-title">Osobné údaje</h1>
+
+    <dl class="osobne-udaje">
+        <dt>Titul</dt>
+        <dd>@Model.Titul</dd>
+
+        <dt>Meno</dt>
+        <dd>@Model.Meno</dd>
+
+        <dt>Priezvisko</dt>
+        <dd>@Model.Priezvisko</dd>
+
+        <dt>Obec</dt>
+        <dd>@Model.Obec</dd>
+
+        <dt>Stav</dt>
+        <dd>@Model.Stav</dd>
+
+        <dt>Email</dt>
+        <dd>
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:@Model.Email">@Model.Email</a>
+        </dd>
+
+        <dt>Telefón</dt>
+        <dd>
+            <i class="fas fa-phone"></i>
+            <a href="tel:@Model.Telefon">@Model.Telefon</a>
+        </dd>
+
+        <dt>Sociálne siete</dt>
+        <dd>
+            @if (!string.IsNullOrEmpty(Model.LinkedIn))
+            {
+                <a href="@Model.LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.GitHub))
+            {
+                <a href = "@Model.GitHub" target = "_blank" rel = "noopener noreferrer" > GitHub </a>
+            }
+        </dd>
+
+        <dt>Viac informácií</dt>
+        <dd>Biológ, ktorý by sa rád stal súčasťou IT sveta.</dd>
+    </dl>
+</div>

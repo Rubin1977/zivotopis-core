@@ -1,0 +1,53 @@
+﻿@model List<ZivotopisCore.Models.PacientModel>
+
+@{
+    ViewBag.Title = "Archivovaní pacienti";
+}
+
+<h2>Archivovaní pacienti</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Žiadni archivovaní pacienti.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Meno</th>
+                <th>Priezvisko</th>
+                <th>Dátum narodenia</th>
+                <th>Pohlavie</th>
+                <th>Rodné číslo</th>
+                <th>Akcie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pacient in Model)
+            {
+                <tr>
+                    <td>@pacient.Meno</td>
+                    <td>@pacient.Priezvisko</td>
+                    <td>@pacient.DatumNarodenia.ToString("dd.MM.yyyy")</td>
+                    <td>@pacient.Pohlavie</td>
+                    <td>@pacient.RodneCislo</td>
+                    <td>
+                        <a href="@Url.Action("Details", "Pacient", new { id = pacient.Id })" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i> Detail
+                        </a>
+                        <a href="@Url.Action("Obnov", "Pacient", new { id = pacient.Id })"
+                           class="btn btn-success btn-sm"
+                           onclick="return confirm('Naozaj chcete obnoviť tohto pacienta?');">
+                            <i class="fas fa-undo"></i> Obnoviť
+                        </a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<a href="@Url.Action("Index", "Pacient")" class="btn btn-secondary">
+    <i class="fas fa-arrow-left"></i> Späť na aktívnych pacientov
+</a>

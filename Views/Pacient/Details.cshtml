@@ -1,0 +1,114 @@
+﻿@model ZivotopisCore.Models.ViewModels.PacientDetailViewModel
+
+@{
+    ViewBag.Title = "Detail pacienta";
+}
+
+<h2>Detail pacienta</h2>
+
+<div class="telo">
+    <h3>@Model.Meno</h3>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Hodnota</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Dátum narodenia</td>
+                    <td>@Model.DatumNarodenia.ToShortDateString()</td>
+                </tr>
+                <tr>
+                    <td>Pohlavie</td>
+                    <td>
+                        @if (Model.Pohlavie == "Muž")
+                        {
+                            <i class="fas fa-mars text-primary">Muž</i>
+                            ;
+                        }
+                        else if (Model.Pohlavie == "Žena")
+                        {
+                            <i class="fas fa-venus text-danger">Žena</i>
+                            ;
+                        }
+                        else
+                        {
+                            @Model.Pohlavie
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>Rodné číslo</td>
+                    <td>@Model.RodneCislo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>Príznaky</h4>
+    @if (Model.Priznaky != null && Model.Priznaky.Any())
+    {
+        <ul class="mini-list">
+            @foreach (var priznak in Model.Priznaky)
+            {
+                <li>@priznak.Nazov</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p><em>Žiadne príznaky</em></p>
+    }
+
+    <h4>Genetické vyšetrenia</h4>
+    @if (Model.GenetickeVysetrenia != null && Model.GenetickeVysetrenia.Any())
+    {
+        <ul class="mini-list">
+            @foreach (var vysetrenie in Model.GenetickeVysetrenia)
+            {
+                <li>
+                    <strong>@vysetrenie.Nazov</strong>:
+                    <span style="color:@(vysetrenie.Vysledok == "Pozitívny" ? "red" : "green")">
+                        @vysetrenie.Vysledok
+                    </span>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p><em>Žiadne vyšetrenia</em></p>
+    }
+
+    <h4>Diagnózy</h4>
+    @if (Model.Diagnozy != null && Model.Diagnozy.Any())
+    {
+        <ul class="mini-list">
+            @foreach (var diagnoza in Model.Diagnozy)
+            {
+                <li>
+                    <strong>@diagnoza.Nazov</strong>
+                    @if (!string.IsNullOrEmpty(diagnoza.Popis))
+                    {
+                        <span>: @diagnoza.Popis</span>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p><em>Neurčená diagnóza</em></p>
+    }
+    <a href="@Url.Action("Index", "Pacient")" class="tlacitko-moje">
+        <i class="fas fa-arrow-left"></i> Späť na zoznam
+    </a>
+    <a href="@Url.Action("Edit", "Pacient", new { id = Model.Id })" class="tlacitko-moje">
+        <i class="fas fa-edit"></i> Upraviť pacienta
+    </a>
+
+</div>

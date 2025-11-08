@@ -1,0 +1,76 @@
+﻿@using ZivotopisCore.Models
+@using ZivotopisCore.Models.Home
+@model OdoslanieSpravyModel
+
+<div class="telo">
+    <div class="row">
+        <div class="col-md-3">
+            <img src="@Url.Content("~/Images/RastislavRuzbacky.jpg")" alt="Rastislav Ružbacký" class="img-fluid rounded" />
+        </div>
+        <div class="col-md-9">
+            <h1>Kontakt</h1>
+            <p>Ak máte akékoľvek otázky alebo návrhy, neváhajte ma kontaktovať.</p>
+
+            <div class="contact-items">
+                <p>
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                    <a href="mailto:ruzbacky@yahoo.com">ruzbacky@yahoo.com</a>
+                    <br />
+                    <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                    <a href="tel:+421948900850">+421 948 900 850</a>
+                </p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/rastislav-ruzbacky-99a8a645/" target="_blank" rel="noopener noreferrer">
+                    <img src="~/Images/Linkedin.png" alt="LinkedIn" width="32" height="32">
+                </a>
+                <a href="https://github.com/Rubin1977" target="_blank" rel="noopener noreferrer">
+                    <img src="~/Images/GitHub_iconka.png" alt="GitHub" width="32" height="32">
+                </a>
+            </div>
+
+            <h2>Kontaktný formulár</h2>
+
+            @using (Html.BeginForm("OdoslanieSpravy", "Home", FormMethod.Post, new { @class = "form-horizontal moj-formular" }))
+            {
+                @Html.AntiForgeryToken() <!-- ← sem to patrí -->
+
+                @Html.ValidationSummary(true, "Niektoré údaje sú nesprávne zadané!")
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Meno, new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.Meno, new { @class = "form-control", placeholder = "Vaše meno" })
+                    @Html.ValidationMessageFor(m => m.Meno, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "napr. meno@example.com" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Telefon, new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.Telefon, new { @class = "form-control", placeholder = "napr. +421 900 123 456" })
+                    @Html.ValidationMessageFor(m => m.Telefon, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Sprava, new { @class = "control-label" })
+                    @Html.TextAreaFor(m => m.Sprava, new { @class = "form-control", rows = "4", placeholder = "Napíšte svoju správu..." })
+                    @Html.ValidationMessageFor(m => m.Sprava, "", new { @class = "text-danger" })
+                </div>
+                <div id="spinner" style="display:none; text-align:center; margin-top:20px;">
+                    <img src="~/Images/rainbow-spinner.gif" alt="Načítava sa..." width="50" height="50" />
+                    <p id="spinner-text" aria-live="polite">Odosielam správu...</p>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="tlacitko-moje">Odoslať</button>
+                </div>
+
+                <script src="~/js/spinner.js"></script>
+            }
+        </div>
+    </div>
+</div>

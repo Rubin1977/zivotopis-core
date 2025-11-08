@@ -1,0 +1,54 @@
+﻿@using ZivotopisCore.Models
+@using ZivotopisCore.Models.Home
+@model VzdelanieModel
+
+<div class="telo">
+    <div class="row equal-height">
+        <div class="col-md-6 column">
+            <h1>Vzdelanie</h1>
+            @foreach (var vz in Model.Vzdelania)
+            {
+                <p>
+                    <strong>@vz.Obdobie</strong><br />
+                    <span class="glyphicon glyphicon-home"></span>
+                    <strong>@vz.Skola</strong><br />
+                    @if (!string.IsNullOrEmpty(vz.Fakulta))
+                    {<span>@vz.Fakulta</span><br />}
+                    @vz.Titul | @vz.Popis
+                    <hr />
+                </p>
+            }
+
+            <h2>Kurzy a certifikáty</h2>
+            <div class="row">
+                @foreach (var kurz in Model.Kurzy)
+                {
+                    <div class="col-md-12">
+                        <p>
+                            <strong>@kurz.Datum</strong>: @kurz.Nazov
+                            <hr class="hr-custom" />
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-6 column">
+            <h2>Pracovné skúsenosti</h2>
+            @foreach (var sk in Model.Skusenosti)
+            {
+                <section>
+                    <p><strong>@sk.Obdobie</strong></p>
+                    <h3>@sk.Pozicia | @sk.Miesto</h3>
+                    <span class="glyphicon glyphicon-home"></span>
+                    <ul>
+                        @foreach (var popis in sk.PopisPrace)
+                        {
+                            <li>@popis</li>
+                        }
+                    </ul>
+                </section>
+            }
+        </div>
+    </div>
+</div>  

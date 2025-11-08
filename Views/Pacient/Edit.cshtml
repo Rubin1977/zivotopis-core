@@ -1,0 +1,108 @@
+﻿@model ZivotopisCore.Models.ViewModels.PacientFormViewModel
+
+@{
+    ViewBag.Title = "Upraviť pacienta";
+}
+
+<h2>Upraviť pacienta</h2>
+
+<div class="telo">
+    @using (Html.BeginForm("Edit", "Pacient", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Pacient.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.Meno)
+            @Html.TextBoxFor(m => m.Pacient.Meno, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Pacient.Meno)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.Priezvisko)
+            @Html.TextBoxFor(m => m.Pacient.Priezvisko, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Pacient.Priezvisko)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.DatumNarodenia)
+            @Html.TextBoxFor(m => m.Pacient.DatumNarodenia, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(m => m.Pacient.DatumNarodenia)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.Pohlavie)
+            @Html.DropDownListFor(m => m.Pacient.Pohlavie, new SelectList(new[] { "Muž", "Žena", "Iné" }), "Vyberte", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Pacient.Pohlavie)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.RodneCislo)
+            @Html.TextBoxFor(m => m.Pacient.RodneCislo, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Pacient.RodneCislo)
+        </div>
+
+        <!-- Diagnózy -->
+        <div class="form-group">
+            <label>Diagnózy</label>
+            <select id="diagnozy" name="SelectedDiagnozy[]" multiple="multiple" class="form-control">
+                @foreach (var d in Model.VsetkyDiagnozy)
+                {
+                    <option value="@d.Id" selected="@(Model.SelectedDiagnozy.Contains(d.Id.ToString()) ? "selected" : null)">
+                        @d.Nazov
+                    </option>
+                }
+            </select>
+        </div>
+
+        <!-- Príznaky -->
+        <div class="form-group">
+            <label>Príznaky</label>
+            <select id="priznaky" name="SelectedPriznaky[]" multiple="multiple" class="form-control">
+                @foreach (var p in Model.VsetkyPriznaky)
+                {
+                    <option value="@p.Id" selected="@(Model.SelectedPriznaky.Contains(p.Id.ToString()) ? "selected" : null)">
+                        @p.Nazov
+                    </option>
+                }
+            </select>
+        </div>
+
+        <!-- Genetické vyšetrenia -->
+        <div class="form-group">
+            <label>Genetické vyšetrenia</label>
+            <select id="vysetrenia" name="SelectedVysetrenia[]" multiple="multiple" class="form-control">
+                @foreach (var v in Model.VsetkyVysetrenia)
+                {
+                    <option value="@v.Id" selected="@(Model.SelectedVysetrenia.Contains(v.Id.ToString()) ? "selected" : null)">
+                        @v.Nazov
+                    </option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Uložiť zmeny
+        </button>
+        <a href="@Url.Action("Details", new { id = Model.Pacient.Id })" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Späť
+        </a>
+    }
+</div>
+
+@section Scripts {
+    <!-- Validácia -->
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <!-- Select2 inicializácia -->
+    <script>
+        $(document).ready(function () {
+            $('#diagnozy').select2({ placeholder: "Vyberte diagnózy", allowClear: true, tags: true });
+            $('#priznaky').select2({ placeholder: "Vyberte príznaky", allowClear: true, tags: true });
+            $('#vysetrenia').select2({ placeholder: "Vyberte vyšetrenia", allowClear: true, tags: true });
+        });
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

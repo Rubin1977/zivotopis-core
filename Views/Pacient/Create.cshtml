@@ -1,0 +1,72 @@
+﻿@model ZivotopisCore.Models.ViewModels.PacientFormViewModel
+
+@{
+    ViewBag.Title = "Pridať pacienta";
+}
+
+<h2>Pridať pacienta</h2>
+
+<div class="telo">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.Meno)
+            @Html.TextBoxFor(m => m.Pacient.Meno, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Pacient.Meno)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.Priezvisko)
+            @Html.TextBoxFor(m => m.Pacient.Priezvisko, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Pacient.Priezvisko)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.DatumNarodenia)
+            @Html.TextBoxFor(m => m.Pacient.DatumNarodenia, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(m => m.Pacient.DatumNarodenia)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.Pohlavie)
+            @Html.DropDownListFor(m => m.Pacient.Pohlavie, new SelectList(new[] { "Muž", "Žena", "Iné" }), "Vyberte", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Pacient.Pohlavie)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Pacient.RodneCislo)
+            @Html.TextBoxFor(m => m.Pacient.RodneCislo, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Pacient.RodneCislo)
+        </div>
+
+        <!-- Príznaky -->
+        <div class="form-group">
+            <label>Zadajte príznaky (oddelené čiarkou)</label>
+            <input type="text" name="NovaPriznak" class="form-control" value="@Model.NovaPriznak" />
+        </div>
+
+        <!-- Genetické vyšetrenia -->
+        <div class="form-group">
+            <label>Zadajte genetické vyšetrenia (oddelené čiarkou)</label>
+            <input type="text" name="NovaVysetrenie" class="form-control" value="@Model.NovaVysetrenie" />
+        </div>
+        <!-- Nová diagnóza -->
+        <div class="form-group">
+            <label>Pridať novú diagnózu</label>
+            <input type="text" name="NovaDiagnoza" class="form-control" value="@Model.NovaDiagnoza" />
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> Pridať pacienta
+        </button>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Späť
+        </a>
+    }
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
