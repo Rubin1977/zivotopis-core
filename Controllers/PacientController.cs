@@ -79,12 +79,21 @@ public class PacientController(AplikaciaDbContext _db, PacientService _service) 
         pacient.GenetickeVysetrenia = [.. _db.Vysetrenia.Where(v => model.SelectedVysetrenia.Contains(v.Id.ToString()))];
 
 
-        if (!string.IsNullOrWhiteSpace(model.NovaDiagnoza))
+        if (!string.IsNullOrWhiteSpace(model.NovaDiagnoza) &&
+            !string.IsNullOrWhiteSpace(model.NovaDiagnozaKod))
         {
-            var nova = new DiagnozaModel { Nazov = model.NovaDiagnoza };
+            var nova = new DiagnozaModel
+            {
+                Nazov = model.NovaDiagnoza,
+                Kod = model.NovaDiagnozaKod,
+                DátumVytvorenia = DateTime.Now,
+                Aktivna = true
+            };
+
             _db.Diagnozy.Add(nova);
             pacient.Diagnozy.Add(nova);
         }
+
 
         _db.Pacienti.Add(pacient);
         _db.SaveChanges();

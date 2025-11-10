@@ -37,6 +37,8 @@ namespace ZivotopisCore.Models.ViewModels
         public string NovaPriznak{ get; set; } = string.Empty;
 
         public string NovaVysetrenie { get; set; } = string.Empty;
+
+        public string NovaDiagnozaKod { get; set; } = string.Empty;
     }
 }
 

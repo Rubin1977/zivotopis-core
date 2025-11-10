@@ -54,9 +54,13 @@
         </div>
         <!-- Nová diagnóza -->
         <div class="form-group">
-            <label>Pridať novú diagnózu</label>
+            <label for="NovaDiagnoza">Názov diagnózy</label>
             <input type="text" name="NovaDiagnoza" class="form-control" value="@Model.NovaDiagnoza" />
+
+            <label for="NovaDiagnozaKod">Kód diagnózy (napr. E11.9)</label>
+            <input type="text" name="NovaDiagnozaKod" class="form-control" value="@Model.NovaDiagnozaKod" />
         </div>
+
 
         <button type="submit" class="btn btn-success">
             <i class="fas fa-plus-circle"></i> Pridať pacienta

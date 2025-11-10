@@ -5,17 +5,22 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace ZivotopisCore.Data
+namespace ZivotopisCore.Data;
+
+public class AplikaciaDbContext(DbContextOptions<AplikaciaDbContext> options) : DbContext(options)
 {
-    public class AplikaciaDbContext : DbContext
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public AplikaciaDbContext(DbContextOptions<AplikaciaDbContext> options)
-            : base(options)
-        {
-        }
-        public DbSet<PacientModel> Pacienti { get; set; }
-        public DbSet<PriznakModel> Priznaky { get; set; }
-        public DbSet<GenetickeVysetrenieModel> Vysetrenia { get; set; }
-        public DbSet<DiagnozaModel> Diagnozy { get; set; } // ← Toto pridaj
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<PacientModel>()
+            .HasMany(p => p.Diagnozy)
+            .WithMany(d => d.Pacienti)
+            .UsingEntity(j => j.ToTable("DiagnozaModelPacientModel"));
     }
+
+    public DbSet<PacientModel> Pacienti { get; set; }
+    public DbSet<PriznakModel> Priznaky { get; set; }
+    public DbSet<GenetickeVysetrenieModel> Vysetrenia { get; set; }
+    public DbSet<DiagnozaModel> Diagnozy { get; set; }
 }

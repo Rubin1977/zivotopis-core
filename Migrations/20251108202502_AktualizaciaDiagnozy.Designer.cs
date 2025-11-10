@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZivotopisCore.Data;
 
@@ -11,9 +12,11 @@ using ZivotopisCore.Data;
 namespace ZivotopisCore.Migrations
 {
     [DbContext(typeof(AplikaciaDbContext))]
-    partial class AplikaciaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251108202502_AktualizaciaDiagnozy")]
+    partial class AktualizaciaDiagnozy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace ZivotopisCore.Migrations
 
                     b.HasIndex("PacientiId");
 
-                    b.ToTable("DiagnozaModelPacientModel", (string)null);
+                    b.ToTable("DiagnozaModelPacientModel");
                 });
 
             modelBuilder.Entity("ZivotopisCore.Models.DiagnozaModel", b =>

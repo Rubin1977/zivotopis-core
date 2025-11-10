@@ -1,0 +1,62 @@
+﻿@model IEnumerable<ZivotopisCore.Models.DiagnozaModel>
+
+@{
+    ViewData["Title"] = "Zoznam diagnóz";
+}
+
+<h2>Zoznam diagnóz</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Pridať novú diagnózu</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kód</th>
+            <th>Názov</th>
+            <th>Typ</th>
+            <th>Aktívna</th>
+            <th>Akcie</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var dg in Model)
+        {
+            <tr>
+                <td>@dg.Kod</td>
+                <td>@dg.Nazov</td>
+                <td>@dg.Typ</td>
+                <td>@(dg.Aktivna ? "Áno" : "Nie")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@dg.Id" class="btn btn-sm btn-warning">Upraviť</a>
+                    @if (dg.Aktivna)
+                    {
+                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal-@dg.Id">
+                            Deaktivovať
+                        </button>
+
+                        <!-- Modálne okno -->
+                        <div class="modal fade" id="confirmModal-@dg.Id" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel-@dg.Id" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmModalLabel-@dg.Id">Potvrdenie deaktivácie</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Zavrieť">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Naozaj chcete deaktivovať diagnózu <strong>@dg.Nazov</strong>?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zrušiť</button>
+                                        <a asp-action="Deactivate" asp-route-id="@dg.Id" class="btn btn-danger">Áno, deaktivovať</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
