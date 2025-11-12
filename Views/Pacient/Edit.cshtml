@@ -1,4 +1,4 @@
-﻿@model ZivotopisCore.Models.ViewModels.PacientFormViewModel
+﻿@model ZivotopisCore.Models.ViewModels.EditPacientViewModel
 
 @{
     ViewBag.Title = "Upraviť pacienta";
@@ -11,6 +11,11 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Pacient.Id)
+
+        <div class="form-group form-check">
+            @Html.CheckBoxFor(m => m.Pacient.Archivovany, new { @class = "form-check-input" })
+            @Html.LabelFor(m => m.Pacient.Archivovany, new { @class = "form-check-label" })
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(m => m.Pacient.Meno)
@@ -54,6 +59,8 @@
                 }
             </select>
         </div>
+        
+
 
         <!-- Príznaky -->
         <div class="form-group">
@@ -97,12 +104,13 @@
 
     <!-- Select2 inicializácia -->
     <script>
-        $(document).ready(function () {
-            $('#diagnozy').select2({ placeholder: "Vyberte diagnózy", allowClear: true, tags: true });
-            $('#priznaky').select2({ placeholder: "Vyberte príznaky", allowClear: true, tags: true });
-            $('#vysetrenia').select2({ placeholder: "Vyberte vyšetrenia", allowClear: true, tags: true });
-        });
+    document.addEventListener("DOMContentLoaded", () => {
+        $('#diagnozy').select2({ placeholder: "Vyberte diagnózy", allowClear: true, tags: true });
+        $('#priznaky').select2({ placeholder: "Vyberte príznaky", allowClear: true, tags: true });
+        $('#vysetrenia').select2({ placeholder: "Vyberte vyšetrenia", allowClear: true, tags: true });
+    });
     </script>
+
 
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }

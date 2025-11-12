@@ -1,44 +1,67 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using ZivotopisCore.Data;
-using ZivotopisCore.Services; // nezabudni na using pre tvoju slu�bu
+using ZivotopisCore.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+// ✅ Dynamické načítanie konfigurácie podľa prostredia
+builder.Configuration
+    .SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
+
+// ✅ Cookie policy pre bezpečné spracovanie
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+    options.Secure = CookieSecurePolicy.Always;
+});
+
+// ✅ Registrácia služieb
+builder.Services.AddSession();
+
+builder.Services.AddControllersWithViews()
+    .AddSessionStateTempDataProvider();
 builder.Services.AddDbContext<AplikaciaDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlOptions => sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
     ));
-
-
-
-// Tu pridaj registr�ciu tvojej slu�by:
 builder.Services.AddScoped<PacientService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ✅ Middleware konfigurácia
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseHsts(); // bezpečnostný header
 }
 
 app.UseHttpsRedirection();
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    await next();
+});
+
 app.UseStaticFiles();
 
-app.UseRouting();
+app.UseCookiePolicy(); // 💡 aktivuje cookie pravidlá
+app.UseSession(); // sem to patrí
 
+app.UseRouting();
 app.UseAuthorization();
 
+// ✅ Routing
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-//Migrations when app start (good for Render)
+
+// ✅ Automatická migrácia databázy pri štarte
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AplikaciaDbContext>();

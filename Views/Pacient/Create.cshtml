@@ -1,4 +1,4 @@
-﻿@model ZivotopisCore.Models.ViewModels.PacientFormViewModel
+﻿@model ZivotopisCore.Models.ViewModels.CreatePacientViewModel
 
 @{
     ViewBag.Title = "Pridať pacienta";
@@ -59,7 +59,14 @@
 
             <label for="NovaDiagnozaKod">Kód diagnózy (napr. E11.9)</label>
             <input type="text" name="NovaDiagnozaKod" class="form-control" value="@Model.NovaDiagnozaKod" />
+
+            <label for="NovaDiagnozaPopis">Popis diagnózy</label>
+            <input type="text" name="NovaDiagnozaPopis" class="form-control" value="@Model.NovaDiagnozaPopis" />
+
+            <label for="NovaDiagnozaTyp">Typ diagnózy</label>
+            <input type="text" name="NovaDiagnozaTyp" class="form-control" value="@Model.NovaDiagnozaTyp" />
         </div>
+
 
 
         <button type="submit" class="btn btn-success">

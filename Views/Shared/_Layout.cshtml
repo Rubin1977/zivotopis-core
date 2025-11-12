@@ -2,6 +2,7 @@
 <html lang="sk">
 <head>
     <meta charset="utf-8" />
+    <title>Životopis Rastislav Ružbacký</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
 
@@ -110,5 +111,7 @@
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @RenderSection("Scripts", required: false)
+    @await Html.PartialAsync("_Alert")
+
 </body>
 </html>

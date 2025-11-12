@@ -3,11 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using ZivotopisCore.Data;
 using ZivotopisCore.Models;
 using ZivotopisCore.Models.ViewModels;
-using ZivotopisCore.Services;
 
 namespace ZivotopisCore.Controllers;
 
-public class PacientController(AplikaciaDbContext _db, PacientService _service) : Controller
+public class PacientController(AplikaciaDbContext _db) : Controller
 {
     public IActionResult Index()
     {
@@ -16,6 +15,7 @@ public class PacientController(AplikaciaDbContext _db, PacientService _service) 
             .Include(p => p.Diagnozy)
             .Include(p => p.Priznaky)
             .Include(p => p.GenetickeVysetrenia)
+            .AsNoTracking()
             .ToList();
 
         return View(pacienti);
@@ -27,6 +27,7 @@ public class PacientController(AplikaciaDbContext _db, PacientService _service) 
             .Include(p => p.Priznaky)
             .Include(p => p.GenetickeVysetrenia)
             .Include(p => p.Diagnozy)
+            .AsNoTracking()
             .FirstOrDefault(p => p.Id == id);
 
         if (pacient is null)
@@ -40,9 +41,9 @@ public class PacientController(AplikaciaDbContext _db, PacientService _service) 
             DatumNarodenia = pacient.DatumNarodenia,
             Pohlavie = pacient.Pohlavie,
             RodneCislo = pacient.RodneCislo,
-            Diagnozy = [.. pacient.Diagnozy],
-            Priznaky = [.. pacient.Priznaky],
-            GenetickeVysetrenia = [.. pacient.GenetickeVysetrenia]
+            Diagnozy = pacient.Diagnozy.ToList(),
+            Priznaky = pacient.Priznaky.ToList(),
+            GenetickeVysetrenia = pacient.GenetickeVysetrenia.ToList()
         };
 
         return View(model);
@@ -50,11 +51,11 @@ public class PacientController(AplikaciaDbContext _db, PacientService _service) 
 
     public IActionResult Create()
     {
-        var model = new PacientFormViewModel
+        var model = new CreatePacientViewModel
         {
-            VsetkyDiagnozy = [.. _db.Diagnozy],
-            VsetkyPriznaky = [.. _db.Priznaky],
-            VsetkyVysetrenia = [.. _db.Vysetrenia]
+            VsetkyDiagnozy = _db.Diagnozy.AsNoTracking().ToList(),
+            VsetkyPriznaky = _db.Priznaky.AsNoTracking().ToList(),
+            VsetkyVysetrenia = _db.Vysetrenia.AsNoTracking().ToList()
         };
 
         return View(model);
@@ -62,30 +63,45 @@ public class PacientController(AplikaciaDbContext _db, PacientService _service) 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(PacientFormViewModel model)
+    public IActionResult Create(CreatePacientViewModel model)
     {
         if (!ModelState.IsValid)
         {
-            model.VsetkyDiagnozy = [.. _db.Diagnozy];
-            model.VsetkyPriznaky = [.. _db.Priznaky];
-            model.VsetkyVysetrenia = [.. _db.Vysetrenia];
+            model.VsetkyDiagnozy = _db.Diagnozy.ToList();
+            model.VsetkyPriznaky = _db.Priznaky.ToList();
+            model.VsetkyVysetrenia = _db.Vysetrenia.ToList();
+            return View(model);
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.NovaDiagnoza) &&
+            string.IsNullOrWhiteSpace(model.NovaDiagnozaKod))
+        {
+            ModelState.AddModelError("NovaDiagnozaKod", "Kód diagnózy je povinný, ak zadáte názov.");
             return View(model);
         }
 
         var pacient = model.Pacient;
 
-        pacient.Diagnozy = [.. _db.Diagnozy.Where(d => model.SelectedDiagnozy.Contains(d.Id.ToString()))];
-        pacient.Priznaky = [.. _db.Priznaky.Where(p => model.SelectedPriznaky.Contains(p.Id.ToString()))];
-        pacient.GenetickeVysetrenia = [.. _db.Vysetrenia.Where(v => model.SelectedVysetrenia.Contains(v.Id.ToString()))];
+        pacient.Diagnozy = _db.Diagnozy
+            .Where(d => model.SelectedDiagnozy.Contains(d.Id.ToString()))
+            .ToList();
 
+        pacient.Priznaky = _db.Priznaky
+            .Where(p => model.SelectedPriznaky.Contains(p.Id.ToString()))
+            .ToList();
 
-        if (!string.IsNullOrWhiteSpace(model.NovaDiagnoza) &&
-            !string.IsNullOrWhiteSpace(model.NovaDiagnozaKod))
+        pacient.GenetickeVysetrenia = _db.Vysetrenia
+            .Where(v => model.SelectedVysetrenia.Contains(v.Id.ToString()))
+            .ToList();
+
+        if (!string.IsNullOrWhiteSpace(model.NovaDiagnoza))
         {
             var nova = new DiagnozaModel
             {
                 Nazov = model.NovaDiagnoza,
                 Kod = model.NovaDiagnozaKod,
+                Popis = string.IsNullOrWhiteSpace(model.NovaDiagnozaPopis) ? "Nešpecifikovaný popis" : model.NovaDiagnozaPopis,
+                Typ = string.IsNullOrWhiteSpace(model.NovaDiagnozaTyp) ? "Nešpecifikovaný typ" : model.NovaDiagnozaTyp,
                 DátumVytvorenia = DateTime.Now,
                 Aktivna = true
             };
@@ -94,10 +110,18 @@ public class PacientController(AplikaciaDbContext _db, PacientService _service) 
             pacient.Diagnozy.Add(nova);
         }
 
-
-        _db.Pacienti.Add(pacient);
-        _db.SaveChanges();
-        return RedirectToAction("Index");
+        try
+        {
+            _db.Pacienti.Add(pacient);
+            _db.SaveChanges();
+            TempData["SuccessMessage"] = "Pacient bol úspešne vytvorený.";
+            return RedirectToAction("Details", new { id = pacient.Id });
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = "Chyba pri ukladaní: " + ex.Message;
+            return View(model);
+        }
     }
 
     public IActionResult Edit(int id)
@@ -108,20 +132,29 @@ public class PacientController(AplikaciaDbContext _db, PacientService _service) 
             .Include(p => p.GenetickeVysetrenia)
             .FirstOrDefault(p => p.Id == id);
 
-        if (pacient is null)
+        if (pacient == null)
             return NotFound();
 
-        var model = new PacientFormViewModel
+        var model = new EditPacientViewModel
         {
-            Pacient = pacient,
-            VsetkyDiagnozy = [.. _db.Diagnozy],
-            VsetkyPriznaky = [.. _db.Priznaky],
-            VsetkyVysetrenia = [.. _db.Vysetrenia],
-            SelectedDiagnozy = [.. pacient.Diagnozy.Select(d => d.Id.ToString())],
-            SelectedPriznaky = [.. pacient.Priznaky.Select(p => p.Id.ToString())],
-            SelectedVysetrenia = [.. pacient.GenetickeVysetrenia.Select(v => v.Id.ToString())]
+            Pacient = new PacientModel
+            {
+                Id = pacient.Id,
+                Meno = pacient.Meno,
+                Priezvisko = pacient.Priezvisko,
+                DatumNarodenia = pacient.DatumNarodenia,
+                Pohlavie = pacient.Pohlavie,
+                RodneCislo = pacient.RodneCislo,
+                Archivovany = pacient.Archivovany
+            },
+            SelectedDiagnozy = pacient.Diagnozy.Select(d => d.Id.ToString()).ToList(),
+            VsetkyDiagnozy = _db.Diagnozy.AsNoTracking().ToList(),
 
+            SelectedPriznaky = pacient.Priznaky.Select(p => p.Id.ToString()).ToList(),
+            VsetkyPriznaky = _db.Priznaky.AsNoTracking().ToList(),
 
+            SelectedVysetrenia = pacient.GenetickeVysetrenia.Select(v => v.Id.ToString()).ToList(),
+            VsetkyVysetrenia = _db.Vysetrenia.AsNoTracking().ToList()
         };
 
         return View(model);
@@ -129,38 +162,101 @@ public class PacientController(AplikaciaDbContext _db, PacientService _service) 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Edit(PacientFormViewModel model)
+    public IActionResult Edit(EditPacientViewModel model)
     {
         if (!ModelState.IsValid)
         {
-            model.VsetkyDiagnozy = [.. _db.Diagnozy];
-            model.VsetkyPriznaky = [.. _db.Priznaky];
-            model.VsetkyVysetrenia = [.. _db.Vysetrenia];
-            Console.WriteLine("Edit POST triggered");
+            model.VsetkyDiagnozy = _db.Diagnozy.ToList();
+            model.VsetkyPriznaky = _db.Priznaky.ToList();
+            model.VsetkyVysetrenia = _db.Vysetrenia.ToList();
             return View(model);
         }
-        Console.WriteLine("Edit POST triggered");
 
-        _service.UpravPacienta(model);
-        return RedirectToAction("Details", new { id = model.Pacient.Id });
+        var pacient = _db.Pacienti
+            .Include(p => p.Diagnozy)
+            .Include(p => p.Priznaky)
+            .Include(p => p.GenetickeVysetrenia)
+            .FirstOrDefault(p => p.Id == model.Pacient.Id);
+
+        if (pacient == null)
+            return NotFound();
+
+        pacient.Meno = model.Pacient.Meno;
+        pacient.Priezvisko = model.Pacient.Priezvisko;
+        pacient.DatumNarodenia = model.Pacient.DatumNarodenia;
+        pacient.Pohlavie = model.Pacient.Pohlavie;
+        pacient.RodneCislo = model.Pacient.RodneCislo;
+        pacient.Archivovany = model.Pacient.Archivovany;
+
+        pacient.Diagnozy = _db.Diagnozy
+            .Where(d => model.SelectedDiagnozy.Contains(d.Id.ToString()))
+            .ToList();
+
+        pacient.Priznaky = _db.Priznaky
+            .Where(p => model.SelectedPriznaky.Contains(p.Id.ToString()))
+            .ToList();
+
+        pacient.GenetickeVysetrenia = _db.Vysetrenia
+            .Where(v => model.SelectedVysetrenia.Contains(v.Id.ToString()))
+            .ToList();
+
+        try
+        {
+            _db.SaveChanges();
+            TempData["SuccessMessage"] = "Zmeny boli úspešne uložené.";
+            return RedirectToAction("Details", new { id = pacient.Id });
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = "Chyba pri ukladaní: " + ex.Message;
+            return View(model);
+        }
     }
+
     public IActionResult Archivuj(int id)
     {
-        var pacient = _db.Pacienti.FirstOrDefault(p => p.Id == id);
+        var pacient = _db.Pacienti.Find(id);
         if (pacient == null)
             return NotFound();
 
         pacient.Archivovany = true;
         _db.SaveChanges();
 
+        TempData["SuccessMessage"] = "Pacient bol archivovaný.";
         return RedirectToAction("Index");
     }
+
     public IActionResult Archiv()
     {
         var archiv = _db.Pacienti
             .Where(p => p.Archivovany)
+            .Include(p => p.Diagnozy)
+            .Include(p => p.Priznaky)
+            .Include(p => p.GenetickeVysetrenia)
+            .AsNoTracking()
             .ToList();
 
         return View(archiv);
+    }
+
+    public IActionResult Obnov(int id)
+    {
+        var pacient = _db.Pacienti.Find(id);
+        if (pacient == null)
+            return NotFound();
+
+        pacient.Archivovany = false;
+
+        try
+        {
+            _db.SaveChanges();
+            TempData["SuccessMessage"] = "Pacient bol obnovený.";
+            return RedirectToAction("Details", new { id = pacient.Id });
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = "Chyba pri obnove: " + ex.Message;
+            return RedirectToAction("Index");
+        }
     }
 }

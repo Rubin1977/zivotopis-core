@@ -7,7 +7,7 @@
 <h2>Detail pacienta</h2>
 
 <div class="telo">
-    <h3>@Model.Meno</h3>
+    <h3>@Model.Meno @Model.Priezvisko</h3>
 
     <div class="table-responsive">
         <table class="table">
@@ -87,18 +87,32 @@
     <h4>Diagnózy</h4>
     @if (Model.Diagnozy != null && Model.Diagnozy.Any())
     {
-        <ul class="mini-list">
-            @foreach (var diagnoza in Model.Diagnozy)
-            {
-                <li>
-                    <strong>@diagnoza.Nazov</strong>
-                    @if (!string.IsNullOrEmpty(diagnoza.Popis))
+        <p><strong>Počet diagnóz:</strong> @Model.Diagnozy.Count()</p>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Názov</th>
+                        <th>Kód</th>
+                        <th>Popis</th>
+                        <th>Typ</th>
+                        <th>Dátum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var dg in Model.Diagnozy)
                     {
-                        <span>: @diagnoza.Popis</span>
+                        <tr>
+                            <td>@dg.Nazov</td>
+                            <td>@dg.Kod</td>
+                            <td>@(string.IsNullOrWhiteSpace(dg.Popis) ? "–" : dg.Popis)</td>
+                            <td>@(string.IsNullOrWhiteSpace(dg.Typ) ? "–" : dg.Typ)</td>
+                            <td>@dg.DátumVytvorenia.ToString("dd.MM.yyyy HH:mm")</td>
+                        </tr>
                     }
-                </li>
-            }
-        </ul>
+                </tbody>
+            </table>
+        </div>
     }
     else
     {

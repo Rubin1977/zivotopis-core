@@ -1,103 +1,123 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Zoznam pacientov";
 }
 
 @model List<ZivotopisCore.Models.PacientModel>
 
 <h2>Zoznam pacientov</h2>
 
+<!-- ✅ Zobrazenie TempData správ -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zavrieť"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zavrieť"></button>
+    </div>
+}
+
 <a class="btn btn-primary mb-3" href="@Url.Action("Create", "Pacient")">Pridať nového pacienta</a>
-<a asp-controller="Pacient" asp-action="Archiv">Archivovaní pacienti</a>
+<a class="btn btn-secondary mb-3 ms-2" asp-controller="Pacient" asp-action="Archiv">Archivovaní pacienti</a>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Meno</th>
-            <th>Priezvisko</th>
-            <th>Dátum narodenia</th>
-            <th>Pohlavie</th>
-            <th>Rodné číslo</th>
-            <th>Príznaky</th>
-            <th>Genetické Vyšetrenia</th>
-            <th>Diagnóza</th>
-            <th>Detail</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var pacient in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@pacient.Meno</td>
-                <td>@pacient.Priezvisko</td>
-                <td>@pacient.DatumNarodenia.ToShortDateString()</td>
-                <td>@pacient.Pohlavie</td>
-                <td>@pacient.RodneCislo</td>
-                <td>
-                    @if (pacient.Priznaky != null && pacient.Priznaky.Any())
-                    {
-                        <ul class="mini-list">
-                            @foreach (var priznak in pacient.Priznaky)
-                            {
-                                <li>@priznak.Nazov</li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <em>Žiadne</em>
-                    }
-                </td>
-                <td>
-                    @if (pacient.GenetickeVysetrenia != null && pacient.GenetickeVysetrenia.Any())
-                    {
-                        <ul class="mini-list">
-                            @foreach (var vysetrenie in pacient.GenetickeVysetrenia)
-                            {
-                                <li>
-                                    @vysetrenie.Nazov:
-                                    <span style="color:@(vysetrenie.Vysledok == "Pozitívny" ? "red" : "green")">
-                                        @vysetrenie.Vysledok
-                                    </span>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <em>Žiadne</em>
-                    }
-                </td>
-                <td>
-                    @if (pacient.Diagnozy != null && pacient.Diagnozy.Any())
-                    {
-                        <ul class="mini-list">
-                            @foreach (var diagnoza in pacient.Diagnozy)
-                            {
-                                <li>
-                                    @diagnoza.Nazov @if (!string.IsNullOrEmpty(diagnoza.Popis))
-                                    {
-                                        <span>: @diagnoza.Popis</span>
-                                    }
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <em>Neurčená</em>
-                    }
-                </td>
-                <td>
-                    <a href="@Url.Action("Details", "Pacient", new { id = pacient.Id })" class="tlacitko-moje">Detail</a>
-                </td>
-                <td>
-                    <a href="@Url.Action("Archivuj", new { id = pacient.Id })" class="btn btn-warning btn-sm">
-                        <i class="fas fa-archive"></i> Archivovať
-                    </a>
-                </td>
-                
+                <th scope="col">Meno</th>
+                <th scope="col">Priezvisko</th>
+                <th scope="col">Dátum narodenia</th>
+                <th scope="col">Pohlavie</th>
+                <th scope="col" class="d-none d-md-table-cell">Rodné číslo</th>
+                <th scope="col">Príznaky</th>
+                <th scope="col" class="d-none d-md-table-cell">Genetické Vyšetrenia</th>
+                <th scope="col">Diagnóza</th>
+                <th scope="col">Detail</th>
+                <th scope="col">Archivovať</th>
             </tr>
-        }
-    </tbody>
-</table>
-
+        </thead>
+        <tbody>
+            @foreach (var pacient in Model)
+            {
+                <tr>
+                    <td>@pacient.Meno</td>
+                    <td>@pacient.Priezvisko</td>
+                    <td>@pacient.DatumNarodenia.ToShortDateString()</td>
+                    <td>@pacient.Pohlavie</td>
+                    <td class="d-none d-md-table-cell">@pacient.RodneCislo</td>
+                    <td>
+                        @if (pacient.Priznaky?.Any() == true)
+                        {
+                            <ul class="mini-list">
+                                @foreach (var priznak in pacient.Priznaky)
+                                {
+                                    <li>@priznak.Nazov</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <em>Žiadne</em>
+                        }
+                    </td>
+                    <td class="d-none d-md-table-cell">
+                        @if (pacient.GenetickeVysetrenia?.Any() == true)
+                        {
+                            <ul class="mini-list">
+                                @foreach (var vysetrenie in pacient.GenetickeVysetrenia)
+                                {
+                                    <li>
+                                        @vysetrenie.Nazov:
+                                        <span class="fw-bold text-@(vysetrenie.Vysledok == "Pozitívny" ? "danger" : "success")">
+                                            @vysetrenie.Vysledok
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <em>Žiadne</em>
+                        }
+                    </td>
+                    <td>
+                        @if (pacient.Diagnozy?.Any() == true)
+                        {
+                            <ul class="mini-list">
+                                @foreach (var diagnoza in pacient.Diagnozy)
+                                {
+                                    <li>
+                                        @diagnoza.Nazov
+                                        @if (!string.IsNullOrEmpty(diagnoza.Popis))
+                                        {
+                                            <span>: @diagnoza.Popis</span>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <em>Neurčená</em>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Details", "Pacient", new { id = pacient.Id })" class="btn btn-info btn-sm">
+                            <i class="fas fa-info-circle"></i> Detail
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Archivuj", "Pacient", new { id = pacient.Id })" class="btn btn-warning btn-sm">
+                            <i class="fas fa-archive"></i> Archivovať
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

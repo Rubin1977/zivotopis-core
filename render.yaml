@@ -1,0 +1,12 @@
+﻿services:
+  - type: web
+    name: zivotopiscore
+    runtime: docker
+    repo: https://github.com/Rubin1977/zivotopis-core
+    branch: main
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        value: 

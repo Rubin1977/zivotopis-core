@@ -10,6 +10,8 @@ html, body {
     background-color: #f0f8ff;
     display: flex;
     flex-direction: column;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%; /* fallback pre staršie Safari */
 }
 
 /* =======================
@@ -95,30 +97,57 @@ p, section li {
 /* =======================
    Tabuľky
    ======================= */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 .table {
     width: 100%;
-    background-color: white;
+    min-width: 900px; /* zabezpečí horizontálny scroll na mobiloch */
+    background-color: #fff;
     border-collapse: separate;
     border-spacing: 0;
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-size: 15px;
 }
 
-.table td, .table th {
-    padding: 12px 15px;
-    text-align: left;
-    vertical-align: middle;
-    border-bottom: 1px solid #ddd;
-}
+    .table th, .table td {
+        padding: 12px 15px;
+        text-align: left;
+        vertical-align: middle;
+        border-bottom: 1px solid #e0e0e0;
+        white-space: normal;
+        word-break: break-word;
+    }
 
-.table-striped tr:nth-child(even) {
+    .table thead {
+        background-color: #53A1F0;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+.table-striped tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-.table thead {
-    background-color: #53A1F0;
-    color: white;
+.table-striped tbody tr:hover {
+    background-color: #eef6ff;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.table-bordered {
+    border: 1px solid #ddd;
+}
+
+.table td span {
     font-weight: bold;
+    color: #333;
 }
 
 .table ul.mini-list {
@@ -127,14 +156,11 @@ p, section li {
     margin: 0;
 }
 
-.table ul.mini-list li {
-    margin-bottom: 4px;
-    font-size: 15px;
-}
-
-.table td span {
-    font-weight: bold;
-}
+    .table ul.mini-list li {
+        margin-bottom: 4px;
+        font-size: 15px;
+        color: #444;
+    }
 
 /* =======================
    Formuláre
@@ -266,3 +292,19 @@ img {
         flex-direction: column;
     }
 }
+@media (max-width: 768px) {
+    .table td, .table th {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+
+    .table ul.mini-list li {
+        font-size: 13px;
+    }
+
+    .tlacitko-moje, .btn-sm {
+        font-size: 13px;
+        padding: 5px 8px;
+    }
+}
+
