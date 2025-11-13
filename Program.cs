@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using ZivotopisCore.Data;
 using ZivotopisCore.Services;
 
@@ -25,11 +26,22 @@ builder.Services.AddSession();
 
 builder.Services.AddControllersWithViews()
     .AddSessionStateTempDataProvider();
+var provider = builder.Configuration["DatabaseProvider"];
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AplikaciaDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        sqlOptions => sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
-    ));
+{
+    if (provider == "PostgreSQL")
+    {
+        options.UseNpgsql(connectionString);
+    }
+    else
+    {
+        options.UseSqlServer(connectionString, sqlOptions =>
+            sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+    }
+});
+
 builder.Services.AddScoped<PacientService>();
 
 var app = builder.Build();
