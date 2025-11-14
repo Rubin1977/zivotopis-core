@@ -9,4 +9,7 @@
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__DefaultConnection
-        value: 
+        value: Host=dpg-d4avu0c9c44c738r1q30-a;Port=5432;Database=zivotopisdb;Username=zivotopisuser;Password=lKUPaGjmH4gGYM4cMsnfgoM4tBKlrwUl
+      - key: DatabaseProvider
+        value: PostgreSQL
+
