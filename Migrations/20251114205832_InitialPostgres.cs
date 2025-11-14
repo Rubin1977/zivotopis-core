@@ -1,40 +1,47 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace ZivotopisCore.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialPostgres : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "DiagnozaModel",
+                name: "Diagnozy",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nazov = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Popis = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Kod = table.Column<string>(type: "text", nullable: false),
+                    Nazov = table.Column<string>(type: "text", nullable: false),
+                    Popis = table.Column<string>(type: "text", nullable: true),
+                    Typ = table.Column<string>(type: "text", nullable: true),
+                    Aktivna = table.Column<bool>(type: "boolean", nullable: false),
+                    DátumVytvorenia = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DiagnozaModel", x => x.Id);
+                    table.PrimaryKey("PK_Diagnozy", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Pacienti",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Meno = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DatumNarodenia = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Pohlavie = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RodneCislo = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Meno = table.Column<string>(type: "text", nullable: false),
+                    Priezvisko = table.Column<string>(type: "text", nullable: false),
+                    DatumNarodenia = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Pohlavie = table.Column<string>(type: "text", nullable: false),
+                    RodneCislo = table.Column<string>(type: "text", nullable: false),
+                    Archivovany = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,16 +52,16 @@ namespace ZivotopisCore.Migrations
                 name: "DiagnozaModelPacientModel",
                 columns: table => new
                 {
-                    DiagnozyId = table.Column<int>(type: "int", nullable: false),
-                    PacientiId = table.Column<int>(type: "int", nullable: false)
+                    DiagnozyId = table.Column<int>(type: "integer", nullable: false),
+                    PacientiId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DiagnozaModelPacientModel", x => new { x.DiagnozyId, x.PacientiId });
                     table.ForeignKey(
-                        name: "FK_DiagnozaModelPacientModel_DiagnozaModel_DiagnozyId",
+                        name: "FK_DiagnozaModelPacientModel_Diagnozy_DiagnozyId",
                         column: x => x.DiagnozyId,
-                        principalTable: "DiagnozaModel",
+                        principalTable: "Diagnozy",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -69,11 +76,11 @@ namespace ZivotopisCore.Migrations
                 name: "Priznaky",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nazov = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DatumZaznamenania = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PacientModelId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nazov = table.Column<string>(type: "text", nullable: false),
+                    DatumZaznamenania = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    PacientModelId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,12 +97,12 @@ namespace ZivotopisCore.Migrations
                 name: "Vysetrenia",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nazov = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Vysledok = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DatumVysetrenia = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PacientModelId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nazov = table.Column<string>(type: "text", nullable: false),
+                    Vysledok = table.Column<string>(type: "text", nullable: false),
+                    DatumVysetrenia = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    PacientModelId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,7 +144,7 @@ namespace ZivotopisCore.Migrations
                 name: "Vysetrenia");
 
             migrationBuilder.DropTable(
-                name: "DiagnozaModel");
+                name: "Diagnozy");
 
             migrationBuilder.DropTable(
                 name: "Pacienti");
