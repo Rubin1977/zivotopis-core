@@ -27,7 +27,8 @@ builder.Services.AddSession();
 builder.Services.AddControllersWithViews()
     .AddSessionStateTempDataProvider();
 var provider = builder.Configuration["DatabaseProvider"];
-var connectionString = builder.Configuration["ConnectionStrings__DefaultConnection"];
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 
 
 builder.Services.AddDbContext<AplikaciaDbContext>(options =>
@@ -80,5 +81,8 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AplikaciaDbContext>();
     db.Database.Migrate();
 }
+Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
+Console.WriteLine($"Provider: {provider}");
+Console.WriteLine($"ConnectionString: {connectionString}");
 
 app.Run();
