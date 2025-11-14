@@ -30,7 +30,14 @@ var provider = builder.Configuration["DatabaseProvider"];
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
+// ✅ Len PostgreSQL provider
+builder.Services.AddDbContext<AplikaciaDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 
+builder.Services.AddScoped<PacientService>();
+/*
 builder.Services.AddDbContext<AplikaciaDbContext>(options =>
 {
     if (provider == "PostgreSQL")
@@ -45,6 +52,7 @@ builder.Services.AddDbContext<AplikaciaDbContext>(options =>
 });
 
 builder.Services.AddScoped<PacientService>();
+*/
 
 var app = builder.Build();
 

@@ -14,7 +14,7 @@ public class DiagnozaController(AplikaciaDbContext context) : Controller
     {
         var zoznam = await _context.Diagnozy
             .AsNoTracking()
-            .OrderByDescending(d => d.DátumVytvorenia)
+            .OrderByDescending(d => d.DatumVytvorenia)
             .ToListAsync();
 
         return View(zoznam);

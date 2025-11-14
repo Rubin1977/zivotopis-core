@@ -15,7 +15,7 @@ namespace ZivotopisCore.Models
         public string? Typ { get; set; } // napr. chronická, akútna
 
         public bool Aktivna { get; set; } = true;
-        public DateTime DátumVytvorenia { get; set; } = DateTime.Now;
+        public DateTime DatumVytvorenia { get; set; }
 
         // Navigačná vlastnosť pre Many-to-Many
         public ICollection<PacientModel> Pacienti { get; set; } = new List<PacientModel>();

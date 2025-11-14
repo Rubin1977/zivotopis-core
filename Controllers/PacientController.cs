@@ -102,7 +102,7 @@ public class PacientController(AplikaciaDbContext _db) : Controller
                 Kod = model.NovaDiagnozaKod,
                 Popis = string.IsNullOrWhiteSpace(model.NovaDiagnozaPopis) ? "Nešpecifikovaný popis" : model.NovaDiagnozaPopis,
                 Typ = string.IsNullOrWhiteSpace(model.NovaDiagnozaTyp) ? "Nešpecifikovaný typ" : model.NovaDiagnozaTyp,
-                DátumVytvorenia = DateTime.Now,
+                DatumVytvorenia = DateTime.Now,
                 Aktivna = true
             };
 
