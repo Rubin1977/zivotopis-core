@@ -27,7 +27,8 @@ builder.Services.AddSession();
 builder.Services.AddControllersWithViews()
     .AddSessionStateTempDataProvider();
 var provider = builder.Configuration["DatabaseProvider"];
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration["ConnectionStrings__DefaultConnection"];
+
 
 builder.Services.AddDbContext<AplikaciaDbContext>(options =>
 {
