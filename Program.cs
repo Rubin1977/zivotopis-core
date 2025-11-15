@@ -33,8 +33,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // ✅ Len PostgreSQL provider
 builder.Services.AddDbContext<AplikaciaDbContext>(options =>
 {
-    options.UseNpgsql(connectionString);
+    options.UseNpgsql(connectionString, o =>
+        o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 });
+
 
 builder.Services.AddScoped<PacientService>();
 /*
