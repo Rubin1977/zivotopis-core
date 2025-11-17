@@ -1,17 +1,27 @@
 ﻿/* =======================
    Reset a základné nastavenia
    ======================= */
-html, body {
+html {
     min-height: 100vh;
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
     color: #333;
     background-color: #f0f8ff;
+}
+
+body {
+    margin: 0;
     display: flex;
     flex-direction: column;
-    text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%; /* fallback pre staršie Safari */
+    min-height: 100vh;
+    font-family: var(--bs-body-font-family, 'Roboto', sans-serif);
+    font-size: var(--bs-body-font-size, 1rem);
+    font-weight: var(--bs-body-font-weight, 400);
+    line-height: var(--bs-body-line-height, 1.5);
+    color: var(--bs-body-color, #333);
+    background-color: var(--bs-body-bg, #f0f8ff);
+    text-align: var(--bs-body-text-align, left);
 }
 
 /* =======================
@@ -32,6 +42,12 @@ html, body {
     border-radius: 5px;
     margin-top: 5px;
 }
+.navbar-brand img {
+    height: 40px; /* alebo 32px, podľa potreby */
+    width: auto;
+    border-radius: 5px;
+}
+
 
 .navbar-default .navbar-nav > li > a i {
     background-color: #53A1F0;
@@ -54,8 +70,8 @@ html, body {
 }
 
 .page-body {
-    flex: 1;
-    padding-top: 100px;
+    flex: 1; /* roztiahne sa, footer zostane dole */
+    padding-top: 100px; /* kvôli fixed navbaru */
     max-width: 1200px;
     margin: 0 auto;
     width: 95%;
@@ -115,22 +131,22 @@ p, section li {
     font-size: 15px;
 }
 
-    .table th, .table td {
-        padding: 12px 15px;
-        text-align: left;
-        vertical-align: middle;
-        border-bottom: 1px solid #e0e0e0;
-        white-space: normal;
-        word-break: break-word;
-    }
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #e0e0e0;
+    white-space: normal;
+    word-break: break-word;
+}
 
-    .table thead {
-        background-color: #53A1F0;
-        color: white;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
+.table thead {
+    background-color: #53A1F0;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
 .table-striped tbody tr:nth-child(even) {
     background-color: #f9f9f9;
@@ -156,11 +172,11 @@ p, section li {
     margin: 0;
 }
 
-    .table ul.mini-list li {
-        margin-bottom: 4px;
-        font-size: 15px;
-        color: #444;
-    }
+.table ul.mini-list li {
+    margin-bottom: 4px;
+    font-size: 15px;
+    color: #444;
+}
 
 /* =======================
    Formuláre
@@ -232,7 +248,7 @@ img {
    Footer
    ======================= */
 .footer {
-    background: linear-gradient(135deg, #2f6f9f, #3a8bd9);
+    background: linear-gradient(135deg, #2f6f9f, #9ad0b7);
     color: white;
     text-align: center;
     padding: 20px 0;
@@ -264,16 +280,30 @@ img {
     margin-top: 10px;
 }
 
-.footer .social-link img {
-    width: 24px;
-    height: 24px;
-    border-radius: 5px;
-    transition: transform 0.3s ease;
+.footer .social-link i {
+    font-size: 24px;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.footer .social-link img:hover {
-    transform: scale(1.1);
+/* Farby značiek */
+.footer .social-link[aria-label="Facebook"] i {
+    color: #1877F2;
 }
+
+.footer .social-link[aria-label="Instagram"] i {
+    color: #E1306C;
+}
+
+.footer .social-link[aria-label="LinkedIn"] i {
+    color: #0A66C2;
+}
+
+/* Hover efekt */
+.footer .social-link i:hover {
+    transform: scale(1.1);
+    color: #FFCC00; /* zvýraznenie pri hoveri */
+}
+
 
 /* =======================
    Responzívne úpravy
