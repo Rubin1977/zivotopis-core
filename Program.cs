@@ -73,6 +73,11 @@ app.Use(async (context, next) =>
 });
 
 app.UseStaticFiles();
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("Content-Type", "text/html; charset=utf-8");
+    await next();
+});
 
 app.UseCookiePolicy(); // 💡 aktivuje cookie pravidlá
 app.UseSession(); // sem to patrí
