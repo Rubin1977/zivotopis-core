@@ -64,7 +64,7 @@
         <p><em>Žiadne príznaky</em></p>
     }
 
-    <h4>Genetické vyšetrenia</h4>
+    <h4>Vyšetrenia</h4>
     @if (Model.GenetickeVysetrenia != null && Model.GenetickeVysetrenia.Any())
     {
         <ul class="mini-list">
@@ -72,7 +72,7 @@
             {
                 <li>
                     <strong>@vysetrenie.Nazov</strong>:
-                    <span style="color:@(vysetrenie.Vysledok == "Pozitívny" ? "red" : "green")">
+                    <span style="color:@(vysetrenie.Vysledok == "Normálne" ? "red" : "green")">
                         @vysetrenie.Vysledok
                     </span>
                 </li>
