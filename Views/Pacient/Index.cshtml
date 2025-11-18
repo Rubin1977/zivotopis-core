@@ -73,7 +73,8 @@
                                 {
                                     <li>
                                         @vysetrenie.Nazov:
-                                        <span class="fw-bold text-@(vysetrenie.Vysledok == "Pozitívny" ? "danger" : "success")">
+                                        <br />
+                                        <span class="fw-bold text-@(vysetrenie.Vysledok == "Normálne" ? "success" : "danger")">
                                             @vysetrenie.Vysledok
                                         </span>
                                     </li>
@@ -92,13 +93,11 @@
                                 @foreach (var diagnoza in pacient.Diagnozy)
                                 {
                                     <li>
-                                        @diagnoza.Nazov
-                                        @if (!string.IsNullOrEmpty(diagnoza.Popis))
-                                        {
-                                            <span>: @diagnoza.Popis</span>
-                                        }
+                                        <strong>@diagnoza.Nazov</strong>:
+                                        <br />
+                                        <span>@diagnoza.Popis</span>
                                     </li>
-                                }
+                                 }
                             </ul>
                         }
                         else

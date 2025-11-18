@@ -72,7 +72,7 @@
             {
                 <li>
                     <strong>@vysetrenie.Nazov</strong>:
-                    <span style="color:@(vysetrenie.Vysledok == "Normálne" ? "red" : "green")">
+                    <span style="color:@(vysetrenie.Vysledok.Trim() == "Normálne" ? "green" : "red")">
                         @vysetrenie.Vysledok
                     </span>
                 </li>

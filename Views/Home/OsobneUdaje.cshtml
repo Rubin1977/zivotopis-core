@@ -36,11 +36,15 @@
         <dd>
             @if (!string.IsNullOrEmpty(Model.LinkedIn))
             {
-                <a href="@Model.LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="@Model.LinkedIn" target="_blank" rel="noopener noreferrer">
+                    <img src="~/images/FB_icon.png" alt="GitHub" style="width:24px;height:24px;" />
+                </a>
             }
             @if (!string.IsNullOrEmpty(Model.GitHub))
             {
-                <a href = "@Model.GitHub" target = "_blank" rel = "noopener noreferrer" > GitHub </a>
+                <a href="@Model.GitHub" target="_blank" rel="noopener noreferrer">
+                    <img src="~/images/GitHub_iconka.png" alt="GitHub" style="width:20px;height:20px;" />
+                </a>
             }
         </dd>
 
