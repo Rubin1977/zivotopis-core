@@ -34,18 +34,15 @@
 
         <dt>Sociálne siete</dt>
         <dd>
-            @if (!string.IsNullOrEmpty(Model.LinkedIn))
-            {
-                <a href="@Model.LinkedIn" target="_blank" rel="noopener noreferrer">
-                    <img src="~/images/FB_icon.png" alt="GitHub" style="width:24px;height:24px;" />
-                </a>
-            }
-            @if (!string.IsNullOrEmpty(Model.GitHub))
-            {
-                <a href="@Model.GitHub" target="_blank" rel="noopener noreferrer">
-                    <img src="~/images/GitHub_iconka.png" alt="GitHub" style="width:20px;height:20px;" />
-                </a>
-            }
+            <div class="ikonky">
+                @foreach (var link in Model.SocialLinks)
+                {
+                    <a href="@link.Url" target="_blank" rel="noopener noreferrer" title="@link.Nazov">
+                        <i class="@link.IkonaClass"></i>
+                    </a>
+                }
+            </div>
+
         </dd>
 
         <dt>Viac informácií</dt>

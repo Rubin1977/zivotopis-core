@@ -29,10 +29,34 @@ public class HomeController : Controller
             Stav = "Ženatý",
             Email = "ruzbacky@yahoo.com",
             Telefon = "+421 948 900 850",
-            LinkedIn = "https://www.linkedin.com/in/rastislav-ruzbacky-99a8a645/",
-            GitHub = "https://github.com/Rubin1977"
         };
+        // 🔑 Tu pridáš sociálne siete do zoznamu
 
+        model.SocialLinks.Add(new SocialLink
+        {
+            Nazov = "Facebook",
+            Url = "https://www.facebook.com/profile.php?id=100009882270245", // sem daj svoj reálny FB profil
+            IkonaClass = "fab fa-facebook"
+        });
+        model.SocialLinks.Add(new SocialLink {
+                Nazov = "LinkedIn",
+                Url = "https://www.linkedin.com/in/rastislav-ruzbacky-99a8a645/",
+                IkonaClass = "fab fa-linkedin"
+            });
+
+        model.SocialLinks.Add(new SocialLink
+        {
+            Nazov = "GitHub",
+            Url = "https://github.com/Rubin1977",
+            IkonaClass = "fab fa-github"
+        });
+
+        model.SocialLinks.Add(new SocialLink
+        {
+            Nazov = "Instagram",
+            Url = "https://www.instagram.com/rastorubin",
+            IkonaClass = "fab fa-instagram"
+        });
         return View(model);
     }
 
@@ -72,8 +96,11 @@ public class HomeController : Controller
             Kurzy = new List<Kurz>
             {
                 new() { Datum = "01/11/2003 - 29/04/2004", Nazov = "Certifikát pre prácu v zdravotníctve pre zdravotníckych pracovníkov v lekárskej genetike" },
-                new() { Datum = "2024", Nazov = "Certifikát o absolvovaní základov jazyka Python" },
-                new() { Datum = "2025", Nazov = "Vytvorenie webovej aplikácie pomocou .NET frameworku, implementácie backend logiky a nasadenia do produkcie" }
+                new() { Datum = "2024", Nazov = "Certifikát o absolvovaní základov programovacieho jazyka Python", Url = ""}, // ak nemáš odkaz, nechaj prázdne 
+                new() { Datum = "2024", Nazov = "Django Girls Workshop – základy webového vývoja v Pythone/Django\r\n   Praktický výstup: osobná webová aplikácia \r\n      👉 ", Url = "https://rastislavruzbacky.eu.pythonanywhere.com"},
+                new() { Datum = "2025", Nazov = "Vytvorenie webovej aplikácie pomocou .NET frameworku kurz DeveloperBoss, implementácia backend logiky a nasadenie do produkcie \r\n      👉", Url = "https://zivotopis-rastislav.onrender.com/Home/Uvod" },
+                new() { Datum = "2025", Nazov = "Testovanie softwaru JUNIOR I. – certifikát (IT Learning Slovakia)\r\n  Zameranie: základy QA, bug reporting, manuálne testovanie webových aplikácií 👉", Url =  "https://www.itlearning.sk/detail/testovanie-sw-balik-zaciatocnik/" },
+                new() { Datum = "2025", Nazov = "Pokročilý kurz Testovanie softwaru SENIOR II. – prebiehajúci\r\n   Zameranie: automatizované testovanie, Selenium, SOAPUI, praktické QA cvičenia 👉", Url =  "https://www.itlearning.sk/detail/testovanie-sw-balik-zaciatocnik/"  }
             },
             Skusenosti = new List<Skusenost>
             {
@@ -99,7 +126,7 @@ public class HomeController : Controller
                     {
                         "Zakladanie a spracovanie krátkodobých tkanivových kultúr",
                         "Prenatálne hodnotenie z plodovej vody",
-                        "Automatické karyotypovanie (LUCIA)"
+                        "Konštitučné karyotypovanie"
                     }
                 }
             }

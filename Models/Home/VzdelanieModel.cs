@@ -26,6 +26,7 @@ namespace ZivotopisCore.Models.Home
     {
         public required string Datum { get; set; }
         public required string Nazov { get; set; }
+        public string?Url { get; set; } // nové pole pre odkaz
     }
 
     public class Skusenost

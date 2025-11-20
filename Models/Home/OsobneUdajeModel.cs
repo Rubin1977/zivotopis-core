@@ -5,6 +5,13 @@ using System.Web;
 
 namespace ZivotopisCore.Models.Home
 {
+
+    public class SocialLink
+    {
+        public string ?Nazov { get; set; }   // napr. "GitHub"
+        public string ?Url { get; set; }     // napr. "https://github.com/Rubin1977"
+        public string ?IkonaClass { get; set; } // napr. "fab fa-github"
+    }
     public class OsobneUdajeModel
     {
         public required string Titul { get; set; }
@@ -14,8 +21,8 @@ namespace ZivotopisCore.Models.Home
         public string? Stav { get; set; }
         public required string Email { get; set; }
         public required string Telefon { get; set; }
-        public required string LinkedIn { get; set; }
-        public required string GitHub { get; set; }
+
+        public List<SocialLink> SocialLinks { get; set; } = new();
     }
 
 }

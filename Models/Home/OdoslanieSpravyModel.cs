@@ -5,11 +5,11 @@ namespace ZivotopisCore.Models.Home
     public class OdoslanieSpravyModel
     {
         [Required(ErrorMessage = "Priezvisko a meno musí byť zadané!")]
-        [Display(Name = "Priezvisko a meno")]
+        [Display(Name = "Meno a Priezvisko")]
         public string Meno { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Email musí byť zadaný!")]
-        [Display(Name = "Email")]
+        [Display(Name = "E-mail")]
         [CustomEmail(ErrorMessage = "Nezadali ste platnú mailovú adresu!")]
         public string Email { get; set; } = string.Empty;
 

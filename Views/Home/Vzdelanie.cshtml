@@ -23,12 +23,23 @@
             <div class="row">
                 @foreach (var kurz in Model.Kurzy)
                 {
-                    <div class="col-md-12">
-                        <p>
-                            <strong>@kurz.Datum</strong>: @kurz.Nazov
-                            <hr class="hr-custom" />
-                        </p>
-                    </div>
+                    <p>
+                        <strong>@kurz.Datum</strong>: @kurz.Nazov
+                        @if (!string.IsNullOrEmpty(kurz.Url))
+                        {
+                            string icon = "🌐";
+                            if (kurz.Nazov.Contains("Python")) icon = "🐍 Navštíviť Django App";
+                            else if (kurz.Nazov.Contains("Django")) icon = "🌐";
+                            else if (kurz.Nazov.Contains("QA")) icon = "🧪 QA Kurz";
+                            else if (kurz.Nazov.Contains(".NET")) icon = "⚙️ Navštíviť .NET Core App";
+
+                            <a href="@kurz.Url" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">
+                                @icon 
+                            </a>
+                        }
+
+                        <hr class="hr-custom" />
+                    </p>
                 }
             </div>
         </div>

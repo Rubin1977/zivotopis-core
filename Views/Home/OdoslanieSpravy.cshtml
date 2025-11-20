@@ -2,4 +2,14 @@
 <p>
     Vaša správa bola úspešne odoslaná! Budeme vás kontaktovať.
 </p>
-<a href="/kontakt" class="tlacitko-moje">Späť na formulár</a>
+
+<!-- tlačidlo späť na kontaktný formulár -->
+<a asp-controller="Home" asp-action="Kontakt" class="tlacitko-moje me-2">
+    <i class="fas fa-envelope"></i> Späť na formulár
+</a>
+
+<!-- tlačidlo späť na úvodnú stránku -->
+<a asp-controller="Home" asp-action="Uvod" class="tlacitko-moje tlacitko-moje-secondary">
+    <i class="fas fa-home"></i> Späť na úvod
+</a>
+
