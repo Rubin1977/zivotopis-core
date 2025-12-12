@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ZivotopisCore.Models.BankModels.UcetModel>
+
+<h2>Bankové účty</h2>
+
+<p>
+    <a asp-action="CreateAccount" class="btn btn-primary">Pridať nový účet</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Číslo účtu</th>
+            <th>Majiteľ</th>
+            <th>Zostatok</th>
+            <th>Akcie</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ucet in Model)
+        {
+            <tr>
+                <td>@ucet.CisloUctu</td>
+                <td>@ucet.Majitel</td>
+                <td>@ucet.Zostatok €</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@ucet.Id">Detail</a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

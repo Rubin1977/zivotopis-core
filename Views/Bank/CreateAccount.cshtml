@@ -1,0 +1,32 @@
+﻿@model ZivotopisCore.Models.BankModels.UcetModel
+
+<h2>Nový účet</h2>
+
+<form asp-action="CreateAccount" method="post">
+    <div class="form-group">
+        <label asp-for="CisloUctu" class="control-label"></label>
+        <input asp-for="CisloUctu" class="form-control" />
+        <span asp-validation-for="CisloUctu" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Majitel" class="control-label"></label>
+        <input asp-for="Majitel" class="form-control" />
+        <span asp-validation-for="Majitel" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Zostatok" class="control-label"></label>
+        <input asp-for="Zostatok" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Zostatok" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Uložiť</button>
+    <a asp-action="Index" class="btn btn-secondary">Späť na zoznam</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

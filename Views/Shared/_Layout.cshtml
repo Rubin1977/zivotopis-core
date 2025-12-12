@@ -6,7 +6,7 @@
     <meta name="description" content="Životopis Rastislava Ružbackého – cesta od cytogenetiky k IT vývoju." />
     <meta name="author" content="Rastislav Ružbacký" />
 
-    <title>@ViewData["Title"] - Životopis Rastislav Ružbacký</title>
+    <title>@ViewData["Title"] Životopis Rastislav Ružbacký</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
@@ -83,6 +83,13 @@
                            aria-current="page"
                            href="@Url.Action("Index", "Pacient")">
                             <i class="fas fa-user-md"></i> Pacienti
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Bank" ? "active" : "")"
+                           aria-current="page"
+                           href="@Url.Action("Index", "Bank")">
+                            <i class="fas fa-university"></i> Banka
                         </a>
                     </li>
                     <!-- ďalšie položky -->

@@ -1,0 +1,20 @@
+﻿@model ZivotopisCore.Models.BankModels.TransakciaModel
+
+<h2>Nová transakcia</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Suma</label>
+        <input asp-for="Suma" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Protiúčet</label>
+        <input asp-for="Protiucet" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Popis</label>
+        <input asp-for="Popis" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Uložiť</button>
+</form>
+

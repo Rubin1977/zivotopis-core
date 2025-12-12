@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ZivotopisCore.Data;
@@ -11,9 +12,11 @@ using ZivotopisCore.Data;
 namespace ZivotopisCore.Migrations
 {
     [DbContext(typeof(AplikaciaDbContext))]
-    partial class AplikaciaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251127194931_AddBankModels")]
+    partial class AddBankModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

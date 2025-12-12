@@ -1,0 +1,29 @@
+﻿@model ZivotopisCore.Models.BankModels.UcetModel
+
+<h2>Detail účtu</h2>
+<p><strong>Číslo účtu:</strong> @Model.CisloUctu</p>
+<p><strong>Majiteľ:</strong> @Model.Majitel</p>
+<p><strong>Zostatok:</strong> @Model.Zostatok €</p>
+
+<h3>Transakcie</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Dátum</th>
+            <th>Suma</th>
+            <th>Protiúčet</th>
+            <th>Popis</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tx in Model.Transakcie)
+        {
+            <tr>
+                <td>@tx.Datum.ToShortDateString()</td>
+                <td>@tx.Suma €</td>
+                <td>@tx.Protiucet</td>
+                <td>@tx.Popis</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ZivotopisCore.Models.BankModels.TransakciaModel>
+
+<h2>Archivované transakcie</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Dátum</th>
+            <th>Suma</th>
+            <th>Protiúčet</th>
+            <th>Popis</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tx in Model)
+        {
+            <tr>
+                <td>@tx.Datum.ToShortDateString()</td>
+                <td>@tx.Suma €</td>
+                <td>@tx.Protiucet</td>
+                <td>@tx.Popis</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

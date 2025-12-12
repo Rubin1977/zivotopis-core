@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ZivotopisCore.Models;
+using ZivotopisCore.Models.BankModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,4 +24,9 @@ public class AplikaciaDbContext(DbContextOptions<AplikaciaDbContext> options) : 
     public DbSet<PriznakModel> Priznaky { get; set; }
     public DbSet<GenetickeVysetrenieModel> Vysetrenia { get; set; }
     public DbSet<DiagnozaModel> Diagnozy { get; set; }
+
+    // Nové tabuľky
+    public DbSet<UcetModel> Ucty { get; set; }
+    public DbSet<TransakciaModel> Transakcie { get; set; }
+    public DbSet<ProduktModel> Produkty { get; set; }
 }
